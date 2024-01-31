@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "08assiLbLTrEgvOm8aAohfiCtU41PrwQhBRORpntVs0nPq63rrnpC4mm23YcjshZ24vqBA5H3fRmBHmkBr3A9w==",
+  "success": true,
+  "projectFilePath": "D:\\CodeWatch\\Project\\GetupMonitor\\GetupMonitor\\GetupMonitor\\GetupMonitor.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\User\\.nuget\\packages\\inthehand.net.bluetooth\\4.1.40\\inthehand.net.bluetooth.4.1.40.nupkg.sha512"
+  ],
+  "logs": []
+}
