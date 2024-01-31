@@ -1,0 +1,5 @@
+
+*.exe
+
+GetupMonitor/GetupMonitor/bin/
+/GetupMonitor/.vs
