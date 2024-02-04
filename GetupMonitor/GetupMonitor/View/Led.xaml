@@ -1,0 +1,50 @@
+﻿<UserControl 
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:GetupMonitor"
+             mc:Ignorable="d" 
+             x:Class="GetupMonitor.View.Led"
+             x:Name="UserControl"
+             d:DesignWidth="300" d:DesignHeight="300">
+    
+    <Grid x:Name="layoutRoot" SizeChanged="layoutRoot_SizeChanged">
+        <Ellipse x:Name="Bezel" Stroke="Black" StrokeThickness="0.5">
+            <Ellipse.Fill>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop x:Name="gs_A" Color="#FFEFEFEF" Offset="0"/>
+                    <GradientStop x:Name="gs_B" Color="#FF7F7F7F" Offset="0.45"/>
+                    <GradientStop x:Name="gs_C" Color="#FF3F3F3F" Offset="0.5"/>
+                    <GradientStop x:Name="gs_D" Color="#FFBFBFBF" Offset="1"/>
+                </LinearGradientBrush>
+            </Ellipse.Fill>
+        </Ellipse>
+        <Ellipse x:Name="Light" Stroke="Black" StrokeThickness="0.5" RenderTransformOrigin="0.5,0.5" Fill="#004576">
+            <Ellipse.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform x:Name="ledTransform" ScaleX="0.7" ScaleY="0.7"/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Ellipse.RenderTransform>
+        </Ellipse>
+        <Ellipse x:Name="Highlight" RenderTransformOrigin="0.5,0.3">
+            <Ellipse.Fill>
+                <LinearGradientBrush EndPoint="0.5,1" MappingMode="RelativeToBoundingBox" StartPoint="0.5,0">
+                    <GradientStop Color="#FFC4C4FF"/>
+                    <GradientStop Offset="1"/>
+                </LinearGradientBrush>
+            </Ellipse.Fill>
+            <Ellipse.RenderTransform>
+                <TransformGroup>
+                    <ScaleTransform  x:Name="hightlightTransform"  ScaleX="0.5" ScaleY="0.4"/>
+                    <SkewTransform/>
+                    <RotateTransform/>
+                    <TranslateTransform/>
+                </TransformGroup>
+            </Ellipse.RenderTransform>
+        </Ellipse>
+    </Grid>
+</UserControl>
