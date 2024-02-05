@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("GetupMonitor")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+78a5549a2abf73fedd096a2b69e12283cab4ccab")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f53782e18ce6f5b952444108bface8e77147b529")]
 [assembly: System.Reflection.AssemblyProductAttribute("GetupMonitor")]
 [assembly: System.Reflection.AssemblyTitleAttribute("GetupMonitor")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

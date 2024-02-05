@@ -17,8 +17,10 @@ int readCount = 0;
 /*IR*/
 const int PinA0  = A0;
 const int PinA1  = A1;
-int RawDataIR  = 0;
-int CalculateValIR  = 0;
+int RawDataA0  = -1;
+int RawDataA1  = -1;
+int CalculateValA0  = -1;
+int CalculateValA1  = -1;
 
 void setup() 
 {
@@ -35,7 +37,8 @@ void setup()
 
 void loop() 
 {
-  //testGP2Y0A21();
+  IRgetData_A0();
+  IRgetData_A1();
   bluetoothPart();
   delay(10); 
   
@@ -77,18 +80,16 @@ void bluetoothPart()
         Serial.print(",");
         Serial.println(byteBuffer[2]);
         if (byteBuffer[1] == CmdSendByteA0)
-        {
-          int irData = testGP2Y0A21(CmdSendByteA0);
-          BT.write(irData);
+        {          
+          BT.write(CalculateValA0);
           Serial.print("Send Data A0: ");
-          Serial.print(CalculateValIR);
+          Serial.print(CalculateValA0);
         }  
         else if (byteBuffer[1] == CmdSendByteA1)
         {
-          int irData = testGP2Y0A21(CmdSendByteA1);
-          BT.write(irData);
+          BT.write(CalculateValA1);
           Serial.print("Send Data A1: ");
-          Serial.print(CalculateValIR);
+          Serial.print(CalculateValA1);
         }  
         
         resetTrigger();
@@ -106,26 +107,41 @@ void resetTrigger()
   readCount = 0;
 }
 
-int testGP2Y0A21(int Pin) 
+void IRgetData_A0() 
 { /* function testGP2Y0A21 */
   ////Read distance sensor
-  RawDataIR = analogRead(Pin);
-  CalculateValIR = distRawToPhys(RawDataIR);
+  RawDataA0 = analogRead(PinA0);
+  CalculateValA0 = distRawToPhysA0(RawDataA0);
+  
   //Serial.print(gp2y0a21Val); 
   //Serial.print(F(" - "));
   //Serial.println(distRawToPhys(RawDataIR));
-  if (CalculateValIR < 200)
+  if (CalculateValA0 < 200)
   {
     //Serial.println(F("Obstacle detected"));
   } 
   else 
   {
     //Serial.println(F("No obstacle"));
-  }
-  return CalculateValIR;
+  }  
 }
 
-int distRawToPhys(int raw) 
+int distRawToPhysA0(int raw) 
+{ /* function distRawToPhys */
+  ////IR Distance sensor conversion rule
+  float Vout = float(raw) * 0.0048828125; // Conversion analog to voltage
+  int phys = 13 * pow(Vout, -1); // Conversion volt to distance
+
+  return phys;
+}
+
+void IRgetData_A1() 
+{ /* function testGP2Y0A21 */
+  RawDataA1 = analogRead(PinA1);
+  CalculateValA1 = distRawToPhysA1(RawDataA1);  
+}
+
+int distRawToPhysA1(int raw) 
 { /* function distRawToPhys */
   ////IR Distance sensor conversion rule
   float Vout = float(raw) * 0.0048828125; // Conversion analog to voltage

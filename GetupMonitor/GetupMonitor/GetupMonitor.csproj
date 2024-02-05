@@ -12,4 +12,13 @@
     <PackageReference Include="InTheHand.Net.Bluetooth" Version="4.1.40" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="ConfigBuild_dotNet">
+      <HintPath>Lib\ConfigBuild_dotNet.dll</HintPath>
+    </Reference>
+    <Reference Include="LogFunction_Framework">
+      <HintPath>Lib\LogFunction_Framework.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

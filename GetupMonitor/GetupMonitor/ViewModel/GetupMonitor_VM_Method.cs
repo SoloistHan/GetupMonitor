@@ -12,13 +12,90 @@ namespace GetupMonitor.ViewModel
     internal partial class GetupMonitor_VM
     {
         #region Class Properties
-           #endregion
+        #endregion
+
+        BluetoothClient BTclient = new BluetoothClient();
+        BluetoothRadio BTradio = BluetoothRadio.Default;
+
+        const string MAJOR_BLUETOOTH = "MAJOR III BLUETOOTH";
+        const string HC06 = "HC-06";
         
-        bool stateMachineTrigger = false;
-        bool systemMonitorTrigger = false;
+        byte[] CmdGetIR_A0 = { 0xFA, 0xA0, 0xFF };
+        byte[] CmdGetIR_A1 = { 0xFA, 0xA1, 0xFF };
+
+        GetupMonitorStates bufferState = GetupMonitorStates.None, lastState = GetupMonitorStates.None;
+
+        bool stateMachineTrigger = false, systemMonitorTrigger = false, getDataTrigger = false ;
+        bool FirstTime = true, exitIdle = false, readToGo = false;
 
         int runningDot = 0;
 
+        private void state_Initial(GetupMonitorStates CurrentState, string MainDisplay)
+        {
+            FirstTime = false;
+            bufferState = CurrentState;
+            MachineState = CurrentState.ToString();
+            DetectState = MainDisplay;
+        }
+
+        private void buttonState(bool Run, bool Release, bool Ack)
+        {
+            OkToRun = Run;
+            OkToRelease = Release;
+            OkToAck = Ack;
+        }
+
+        //private string checkColumn()
+        //{
+        //    if ()
+        //}
+
+        private void getDataIR()
+        {
+            if (BTclient.Connected)
+            {
+                try
+                {
+                    NetworkStream nwStream = BTclient.GetStream();
+                    nwStream.ReadTimeout = 1000;
+
+                    byte[] receiveAryA0 = new byte[1024];
+                    nwStream.Write(CmdGetIR_A0, 0, CmdGetIR_A0.Length);
+                    Thread.Sleep(100);
+                    nwStream.Read(receiveAryA0, 0, 1);
+                    RawDataID_A0 = receiveAryA0[0];
+
+                    byte[] receiveAryA1 = new byte[1024];
+                    nwStream.Write(CmdGetIR_A1, 0, CmdGetIR_A1.Length);
+                    Thread.Sleep(100);
+                    nwStream.Read(receiveAryA1, 0, 1);
+                    RawDataID_A1 = receiveAryA1[0];
+
+                    string stop = "";
+                }
+                catch (Exception ex)
+                {
+                    string err = ex.Message;
+                }
+            }
+        }
+
+        private string runtimeDisplay(string Prefix)
+        {
+            string outcome = "";
+            string dot = "";
+            for (int run = 0; run < runningDot; run++)
+                dot += ".";
+            outcome = $"{Prefix}{dot}";
+            if (runningDot > 3)
+                runningDot = 0;
+            else
+                runningDot++;
+
+            return outcome;
+        }
+
+        #region Bluetooth Async Connect
         private async void async_bluetoothMonitor()
         {
             systemMonitorTrigger = true;
@@ -62,20 +139,7 @@ namespace GetupMonitor.ViewModel
             return true;
         }
 
-        private string runtimeDisplay(string Prefix)
-        {
-            string outcome = "";
-            string dot = "";
-            for (int run = 0; run < runningDot; run++)
-                dot += ".";
-            outcome = $"{Prefix}{dot}";
-            if (runningDot > 3)
-                runningDot = 0;
-            else
-                runningDot++;
-
-            return outcome;
-        }
+        #endregion
 
         private void bluetoothTest()
         {

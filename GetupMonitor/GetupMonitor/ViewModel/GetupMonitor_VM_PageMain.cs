@@ -10,14 +10,24 @@ namespace GetupMonitor.ViewModel
     public enum LedColor { Red = -1, None = 0, Green = 1 }
     internal partial class GetupMonitor_VM
     {
-        private bool _IsRunning = false;
-        public bool IsRunning
+        private void pageMain_Initial()
         {
-            get { return _IsRunning; }
+            AudioActive = Convert.ToBoolean( configDic[Audio_Active]);
+            SingleMode = Convert.ToBoolean(configDic[Single_Mode]);
+            MinimumIR_A0 =  configDic[Minimum_A0];
+            MaximumIR_A0 = configDic[Maximum_A0];
+            MinimumIR_A1 = configDic[Minimum_A1];
+            MaximumIR_A1 = configDic[Maximum_A1];
+        }
+
+        private bool _IsIdle = true;
+        public bool IsIdle
+        {
+            get { return _IsIdle; }
             set
             {
-                _IsRunning = value;
-                NotifyPropertyChanged("IsRunning");
+                _IsIdle = value;
+                NotifyPropertyChanged("IsIdle");
             }
         }
         #region Bluetooth
@@ -89,14 +99,14 @@ namespace GetupMonitor.ViewModel
             }
         }
 
-        private bool _OkToTest = false;
-        public bool OkToTest
+        private bool _OkToRelease = false;
+        public bool OkToRelease
         {
-            get { return _OkToTest; }
+            get { return _OkToRelease; }
             set
             {
-                _OkToTest = value;
-                NotifyPropertyChanged("OkToTest");
+                _OkToRelease = value;
+                NotifyPropertyChanged("OkToRelease");
             }
         }
 
@@ -127,21 +137,21 @@ namespace GetupMonitor.ViewModel
         }
         private void runActive()
         {
-           // exitIdle = true;
+            exitIdle = true;
         }
 
-        private ICommand _TestCommand;
-        public ICommand TestCommand
+        private ICommand _ReleaseCommand;
+        public ICommand ReleaseCommand
         {
             get
             {
-                if (null == _TestCommand)
+                if (null == _ReleaseCommand)
                 {
-                    _TestCommand = new RelayCommand(
+                    _ReleaseCommand = new RelayCommand(
                         param => testActive(),
                         param => true);
                 }
-                return _TestCommand;
+                return _ReleaseCommand;
             }
         }
         private void testActive()
@@ -180,27 +190,58 @@ namespace GetupMonitor.ViewModel
                 NotifyPropertyChanged("AudioActive");
             }
         }
+        private bool _SingleMode = false;
+        public bool SingleMode
+        {
+            get { return _SingleMode; }
+            set
+            {
+                _SingleMode = value;
+                NotifyPropertyChanged("SingleMode");
+            }
+        }
 
-        private int _MinimumIR = -1;
-        public int MinimumIR
+        private string _MinimumIR_A0 = "-1";
+        public string MinimumIR_A0
         {
-            get { return _MinimumIR; }
+            get { return _MinimumIR_A0; }
             set
             {
-                _MinimumIR = value;
-                NotifyPropertyChanged("MinimumIR");
+                _MinimumIR_A0 = value;
+                NotifyPropertyChanged("MinimumIR_A0");
             }
         }
-        private int _MaximumIR = -1;
-        public int MaximumIR
+        private string _MaximumIR_A0 = "-1";
+        public string MaximumIR_A0
         {
-            get { return _MaximumIR; }
+            get { return _MaximumIR_A0; }
             set
             {
-                _MaximumIR = value;
-                NotifyPropertyChanged("MaximumIR");
+                _MaximumIR_A0 = value;
+                NotifyPropertyChanged("MaximumIR_A0");
             }
         }
+        private string _MinimumIR_A1 = "-1";
+        public string MinimumIR_A1
+        {
+            get { return _MinimumIR_A1; }
+            set
+            {
+                _MinimumIR_A1 = value;
+                NotifyPropertyChanged("MinimumIR_A1");
+            }
+        }
+        private string _MaximumIR_A1 = "";
+        public string MaximumIR_A1
+        {
+            get { return _MaximumIR_A1; }
+            set
+            {
+                _MaximumIR_A1 = value;
+                NotifyPropertyChanged("MaximumIR_A1");
+            }
+        }
+
         private int _RawDataID_A0 = -1;
         public int RawDataID_A0
         {
@@ -219,6 +260,17 @@ namespace GetupMonitor.ViewModel
             {
                 _RawDataID_A1 = value;
                 NotifyPropertyChanged("RawDataID_A1");
+            }
+        }
+
+        private string _DetectState = "系統待命";
+        public string DetectState
+        {
+            get { return _DetectState; }
+            set
+            {
+                _DetectState = value;
+                NotifyPropertyChanged("DetectState");
             }
         }
 

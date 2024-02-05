@@ -25,3 +25,5 @@ D:\CodeWatch\Project\GetupMonitor\GetupMonitor\GetupMonitor\obj\Debug\net8.0-win
 D:\CodeWatch\Project\GetupMonitor\GetupMonitor\GetupMonitor\obj\Debug\net8.0-windows\View\Led.g.cs
 D:\CodeWatch\Project\GetupMonitor\GetupMonitor\GetupMonitor\obj\Debug\net8.0-windows\GeneratedInternalTypeHelper.g.cs
 D:\CodeWatch\Project\GetupMonitor\GetupMonitor\GetupMonitor\obj\Debug\net8.0-windows\View\Led.baml
+D:\CodeWatch\Project\GetupMonitor\GetupMonitor\GetupMonitor\bin\Debug\net8.0-windows\ConfigBuild_dotNet.dll
+D:\CodeWatch\Project\GetupMonitor\GetupMonitor\GetupMonitor\bin\Debug\net8.0-windows\LogFunction_Framework.dll
