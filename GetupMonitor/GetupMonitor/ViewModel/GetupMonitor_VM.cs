@@ -11,6 +11,7 @@ using System.Windows.Threading;
 using ConfigBuild_dotNet;
 using System.Windows.Controls;
 using System.Windows;
+using System.Media;
 
 namespace GetupMonitor.ViewModel
 {
@@ -22,7 +23,7 @@ namespace GetupMonitor.ViewModel
         {
             _MonitorWindow = View;
             _MonitorWindow.DataContext = this;
-
+            
             readConfig();
             pageMain_Initial();
             async_bluetoothMonitor();
@@ -30,7 +31,7 @@ namespace GetupMonitor.ViewModel
             monitor_Initial();
         }
 
-        const string Audio_Active = "Audio_Active", Single_Mode = "Single_Mode";
+        const string Audio_Active = "Audio_Active", Single_Mode = "Single_Mode", StableValue = "StableValue";
         const string Minimum_A0 = "Minimum_A0", Maximum_A0 = "Maximum_A0", Minimum_A1 = "Minimum_A1", Maximum_A1 = "Maximum_A1";
 
         ConfigBuild cb = new ConfigBuild();
@@ -44,10 +45,11 @@ namespace GetupMonitor.ViewModel
             {
                 configDic.Add(Audio_Active, "true");
                 configDic.Add(Single_Mode, "false");
-                configDic.Add(Minimum_A0, "20");
-                configDic.Add(Maximum_A0, "40");
-                configDic.Add(Minimum_A1, "20");
-                configDic.Add(Maximum_A1, "40");
+                configDic.Add(StableValue, "3");
+                configDic.Add(Minimum_A0, "1");
+                configDic.Add(Maximum_A0, "10");
+                configDic.Add(Minimum_A1, "1");
+                configDic.Add(Maximum_A1, "10");
 
                 Dictionary<string, string> _configDic = new Dictionary<string, string>(configDic);
                 foreach (KeyValuePair<string, string> getconfig in configDic)
@@ -119,6 +121,7 @@ namespace GetupMonitor.ViewModel
         {
             while(getDataTrigger)
             {
+                
                 getDataIR();
             }
             return true;

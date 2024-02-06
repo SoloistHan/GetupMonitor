@@ -27,9 +27,73 @@ namespace GetupMonitor
         {
             //GetupMonitor_VM.StateMachineTrigger = false;
         }
+        private void TBstable_KeyEnterUpdate(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                txtMinA0.Focus();
+            }
+        }
+        private void TBstable_LostFocus(object sender, RoutedEventArgs e)
+        {
+            BindingExpression binding = BindingOperations.GetBindingExpression(txtStable, TextBox.TextProperty);
+            if (binding != null) { binding.UpdateSource(); }
+        }
+
+        private void TBminA0_KeyEnterUpdate(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                txtMaxA0.Focus();
+            }
+        }
+        private void TBminA0_LostFocus(object sender, RoutedEventArgs e)
+        {
+            BindingExpression binding = BindingOperations.GetBindingExpression(txtMinA0, TextBox.TextProperty);
+            if (binding != null) { binding.UpdateSource(); }
+        }
+
+        private void TBmaxA0_KeyEnterUpdate(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                txtMinA1.Focus();
+            }
+        }
+        private void TBmaxA0_LostFocus(object sender, RoutedEventArgs e)
+        {
+            BindingExpression binding = BindingOperations.GetBindingExpression(txtMaxA0, TextBox.TextProperty);
+            if (binding != null) { binding.UpdateSource(); }
+        }
+
+        private void TBminA1_KeyEnterUpdate(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                txtMaxA1.Focus();
+            }
+        }
+        private void TBminA1_LostFocus(object sender, RoutedEventArgs e)
+        {
+            BindingExpression binding = BindingOperations.GetBindingExpression(txtMinA1, TextBox.TextProperty);
+            if (binding != null) { binding.UpdateSource(); }
+        }
+        private void TBmaxA1_KeyEnterUpdate(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                btnRun.Focus();
+            }
+        }
+
+        private void TBmaxA1_LostFocus(object sender, RoutedEventArgs e)
+        {
+            BindingExpression binding = BindingOperations.GetBindingExpression(txtMaxA1, TextBox.TextProperty);
+            if (binding != null) { binding.UpdateSource(); }
+        }
     }
 
-
+    #region Color
     public class BoolRedConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
@@ -103,4 +167,5 @@ namespace GetupMonitor
         }
     }
 
+    #endregion
 }

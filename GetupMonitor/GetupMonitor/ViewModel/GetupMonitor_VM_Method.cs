@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace GetupMonitor.ViewModel
 {
@@ -13,6 +14,9 @@ namespace GetupMonitor.ViewModel
     {
         #region Class Properties
         #endregion
+
+        enum DetectCriteria {StableRange, MinA0, MaxA0, CountingA0, MinA1, MaxA1, CountingA1}
+        Dictionary<DetectCriteria, uint> CurrentDetect;
 
         BluetoothClient BTclient = new BluetoothClient();
         BluetoothRadio BTradio = BluetoothRadio.Default;
@@ -45,10 +49,68 @@ namespace GetupMonitor.ViewModel
             OkToAck = Ack;
         }
 
-        //private string checkColumn()
-        //{
-        //    if ()
-        //}
+        private bool checkInteger()
+        {
+            uint minA0 = Convert.ToUInt16(MinimumIR_A0);
+            uint maxA0 = Convert.ToUInt16(MaximumIR_A0);
+            uint minA1 = Convert.ToUInt16(MinimumIR_A1);
+            uint maxA1 = Convert.ToUInt16(MaximumIR_A1);
+
+            bool limMinA0 = minA0 < 200;
+            bool limMaxA0 = maxA0 < 200;
+            bool limMinA1 = minA1 < 200;
+            bool limMaxA1 = maxA1 < 200;
+            bool rangeA0 = minA0 < maxA0;
+            bool rangeA1 = minA1 < maxA1;
+
+            if (!limMaxA0)
+                OperatorPrompt = "A0偵測下限須小於200";
+            else if (!limMaxA0)
+                OperatorPrompt = "A0偵測上限須小於200";
+            else if (!limMinA1)
+                OperatorPrompt = "A1偵測下限須小於200";
+            else if (!limMaxA1)
+                OperatorPrompt = "A1偵測上限須小於200";
+            else if (!rangeA0)
+                OperatorPrompt = "A0偵測下限不可大於偵測上限";
+            else if (!rangeA1)
+                OperatorPrompt = "A1偵測下限不可大於偵測上限";
+
+            if (limMaxA0 && limMaxA1 && limMinA0 && limMinA1 && rangeA0 && rangeA1)
+                return true;
+            else
+                return false;
+        }
+
+        private bool collectCriteria()
+        {
+            CurrentDetect = new Dictionary<DetectCriteria, uint>();
+            try
+            {
+                CurrentDetect.Add(DetectCriteria.StableRange, Convert.ToUInt16(StableRange));
+                CurrentDetect.Add(DetectCriteria.MinA0, Convert.ToUInt16(MinimumIR_A0));
+                CurrentDetect.Add(DetectCriteria.MaxA0, Convert.ToUInt16(MaximumIR_A0));
+                CurrentDetect.Add(DetectCriteria.MinA1, Convert.ToUInt16(MinimumIR_A1));
+                CurrentDetect.Add(DetectCriteria.MaxA1, Convert.ToUInt16(MaximumIR_A1));
+
+                return true;
+            }
+            catch(Exception ex)
+            {
+                OperatorPrompt = ex.Message;
+            }
+            return false;
+        }
+
+        private void detect_Initial()
+        {
+            passA0 = false;
+            passA1 = false;
+            countingA0 = 0;
+            countingA1 = 0;
+            stableA0 = new System.Drawing.Point(0, 0);
+            stableA1 = new System.Drawing.Point(0, 0);
+        }
 
         private void getDataIR()
         {
@@ -63,19 +125,19 @@ namespace GetupMonitor.ViewModel
                     nwStream.Write(CmdGetIR_A0, 0, CmdGetIR_A0.Length);
                     Thread.Sleep(100);
                     nwStream.Read(receiveAryA0, 0, 1);
-                    RawDataID_A0 = receiveAryA0[0];
+                    RawDataIR_A0 = receiveAryA0[0];
 
                     byte[] receiveAryA1 = new byte[1024];
                     nwStream.Write(CmdGetIR_A1, 0, CmdGetIR_A1.Length);
                     Thread.Sleep(100);
                     nwStream.Read(receiveAryA1, 0, 1);
-                    RawDataID_A1 = receiveAryA1[0];
+                    RawDataIR_A1 = receiveAryA1[0];
 
                     string stop = "";
                 }
                 catch (Exception ex)
                 {
-                    string err = ex.Message;
+                    MessageBox.Show( ex.Message);
                 }
             }
         }

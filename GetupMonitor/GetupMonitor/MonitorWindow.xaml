@@ -211,54 +211,62 @@
                                  HorizontalAlignment="Left" Padding="0"   IsChecked="{Binding AudioActive}"/>
                         <TextBlock DockPanel.Dock="Left" Style="{StaticResource db_pdf_TB}" Text="提示音效" HorizontalAlignment="Left" FontSize="24"/>
 
-                        <CheckBox DockPanel.Dock="Left" Height="20" Width="20" Margin="40,0,0,0" VerticalAlignment="Center" VerticalContentAlignment="Center" 
+                        <CheckBox DockPanel.Dock="Left" Height="20" Width="20" Margin="20,0,0,0" VerticalAlignment="Center" VerticalContentAlignment="Center" 
                                   HorizontalAlignment="Left" Padding="0"  IsChecked="{Binding SingleMode}"/>
                         <TextBlock DockPanel.Dock="Left" Style="{StaticResource db_pdf_TB}" Text="單一偵測" HorizontalAlignment="Left" FontSize="24"/>
+
+                        <TextBlock DockPanel.Dock="Left" Style="{StaticResource db_pdf_TB}" Text="穩定值" Margin="20,0,0,0" HorizontalAlignment="Left" FontSize="24"/>
+                        <TextBox   x:Name="txtStable"  VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"  Style="{StaticResource TextEnter}" MaxLength="11"
+                                   Height="27" Width="50" FontWeight="SemiBold" Text="{Binding StableRange}"  LostFocus="TBstable_LostFocus"  KeyUp="TBstable_KeyEnterUpdate"/>
                     </StackPanel>
 
                     <!--================A0 Detect================-->
                     <StackPanel Grid.Row="1"  Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5,0,0" >
                         <TextBlock DockPanel.Dock="Left" Style="{StaticResource db_pdf_TB}" Text="A0: 偵測下限" Margin="10,0,0,0" HorizontalAlignment="Left" FontSize="24"/>
-                        <TextBox   VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"  Style="{StaticResource TextEnter}" MaxLength="11"
-                                   Height="27" Width="130" FontWeight="SemiBold" Text="{Binding MinimumIR_A0}" />
+                        <TextBox  x:Name="txtMinA0"  VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"  Style="{StaticResource TextEnter}" MaxLength="11"
+                                   Height="27" Width="130" FontWeight="SemiBold" Text="{Binding MinimumIR_A0}"  LostFocus="TBminA0_LostFocus"  KeyUp="TBminA0_KeyEnterUpdate"/>
 
                         <TextBlock DockPanel.Dock="Left" Style="{StaticResource db_pdf_TB}" Text="~" Margin="3,0,0,0" HorizontalAlignment="Left" FontSize="24"/>
 
-                        <TextBox  VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"  Style="{StaticResource TextEnter}" MaxLength="11"
-                                  Height="27" Width="130" FontWeight="SemiBold" Text="{Binding MaximumIR_A0}" />
+                        <TextBox  x:Name="txtMaxA0" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"  Style="{StaticResource TextEnter}" MaxLength="11"
+                                  Height="27" Width="130" FontWeight="SemiBold" Text="{Binding MaximumIR_A0}" LostFocus="TBmaxA0_LostFocus"  KeyUp="TBmaxA0_KeyEnterUpdate"/>
                         <TextBlock DockPanel.Dock="Left" Style="{StaticResource db_pdf_TB}" Text="偵測上限" Margin="0,0,0,0" HorizontalAlignment="Left" FontSize="24"/>
                     </StackPanel>
                     
                     <!--================A1 Detect================-->
                     <StackPanel Grid.Row="2"  Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5,0,0" >
                         <TextBlock DockPanel.Dock="Left" Style="{StaticResource db_pdf_TB}" Text="A1: 偵測下限" Margin="10,0,0,0" HorizontalAlignment="Left" FontSize="24"/>
-                        <TextBox   VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"  Style="{StaticResource TextEnter}" MaxLength="11"
-                                   Height="27" Width="130" FontWeight="SemiBold" IsReadOnly="{Binding IsRunning}" Text="{Binding MinimumIR_A1}" />
+                        <TextBox   x:Name="txtMinA1" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"  Style="{StaticResource TextEnter}" MaxLength="11"
+                                   Height="27" Width="130" FontWeight="SemiBold" IsReadOnly="{Binding IsRunning}" Text="{Binding MinimumIR_A1}" LostFocus="TBminA1_LostFocus"  KeyUp="TBminA1_KeyEnterUpdate"/>
 
                         <TextBlock DockPanel.Dock="Left" Style="{StaticResource db_pdf_TB}" Text="~" Margin="3,0,0,0" HorizontalAlignment="Left" FontSize="24"/>
 
-                        <TextBox  VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"  Style="{StaticResource TextEnter}" MaxLength="11"
-                                  Height="27" Width="130" FontWeight="SemiBold" IsReadOnly="{Binding IsRunning}" Text="{Binding MaximumIR_A1}" />
+                        <TextBox  x:Name="txtMaxA1" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"  Style="{StaticResource TextEnter}" MaxLength="11"
+                                  Height="27" Width="130" FontWeight="SemiBold" IsReadOnly="{Binding IsRunning}" Text="{Binding MaximumIR_A1}"  LostFocus="TBmaxA1_LostFocus"  KeyUp="TBmaxA1_KeyEnterUpdate"/>
                         <TextBlock DockPanel.Dock="Left" Style="{StaticResource db_pdf_TB}" Text="偵測上限" Margin="0,0,0,0" HorizontalAlignment="Left" FontSize="24"/>
                     </StackPanel>
                 </Grid>
             </StackPanel>
 
             <!--================Runtime Data================-->
-            <StackPanel Grid.Row="4" Height="AUTO" Orientation="Horizontal" Margin="20,10,5,0" >
+            <StackPanel Grid.Row="4" Height="AUTO" Orientation="Horizontal" Margin="10,10,5,0" >
                 <TextBlock DockPanel.Dock="Left" Style="{StaticResource db_pdf_TB}" Text="A0 IR : " HorizontalAlignment="Left" FontSize="24" Margin="5,0,0,0" />
                 <TextBox  VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"  Style="{StaticResource TextEnter}" MaxLength="11"
-                          Height="27" Width="130" FontWeight="SemiBold" IsReadOnly="True" Text="{Binding RawDataID_A0}" />
+                          Height="27" Width="50" FontWeight="SemiBold" IsReadOnly="True" Text="{Binding RawDataIR_A0}" />
+                <TextBlock DockPanel.Dock="Left" Style="{StaticResource db_pdf_TB}" Text="{Binding CountingA0}"  HorizontalAlignment="Left" 
+                           FontSize="24" Margin="10,0,0,0" />
                 
-                <TextBlock DockPanel.Dock="Left" Style="{StaticResource db_pdf_TB}" Text="A1 IR : " HorizontalAlignment="Left" FontSize="24" Margin="55,0,0,0" />
+                <TextBlock DockPanel.Dock="Left" Style="{StaticResource db_pdf_TB}" Text="A1 IR : " HorizontalAlignment="Left" FontSize="24" Margin="105,0,0,0" />
                 <TextBox  VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"  Style="{StaticResource TextEnter}" MaxLength="11"
-                          Height="27" Width="130" FontWeight="SemiBold" IsReadOnly="True" Text="{Binding RawDataID_A1}" />
+                          Height="27" Width="50" FontWeight="SemiBold" IsReadOnly="True" Text="{Binding RawDataIR_A1}" />
+                <TextBlock DockPanel.Dock="Left" Style="{StaticResource db_pdf_TB}" Text="{Binding CountingA1}"  HorizontalAlignment="Left" FontSize="24" 
+                           Margin="10,0,0,0" />
             </StackPanel>
 
             <StackPanel Grid.Row="5" Height="AUTO" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,10,0,0" >
                 
                 <TextBox  VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"  Style="{StaticResource TextEnter}" MaxLength="11"
-                          Height="125" Width="530" FontSize="40" FontWeight="SemiBold" IsReadOnly="True" Text="{Binding DetectState}" />
+                          Height="125" Width="530" FontSize="40" FontWeight="SemiBold" IsReadOnly="True" Text="{Binding DetectState}" Background="{Binding MainDisplayColor}"/>
             </StackPanel>
 
         </Grid>

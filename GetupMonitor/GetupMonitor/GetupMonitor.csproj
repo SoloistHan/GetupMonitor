@@ -21,4 +21,12 @@
     </Reference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Audio\" />
+  </ItemGroup>
+
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="copy /Y &quot;$(ProjectDir)Audio\WildRose.wav&quot; &quot;$(TargetDir)&quot;" />
+  </Target>
+
 </Project>

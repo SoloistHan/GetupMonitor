@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Windows.Media;
 
 namespace GetupMonitor.ViewModel
 {
@@ -14,6 +15,7 @@ namespace GetupMonitor.ViewModel
         {
             AudioActive = Convert.ToBoolean( configDic[Audio_Active]);
             SingleMode = Convert.ToBoolean(configDic[Single_Mode]);
+            StableRange = configDic[StableValue];
             MinimumIR_A0 =  configDic[Minimum_A0];
             MaximumIR_A0 = configDic[Maximum_A0];
             MinimumIR_A1 = configDic[Minimum_A1];
@@ -137,7 +139,10 @@ namespace GetupMonitor.ViewModel
         }
         private void runActive()
         {
-            exitIdle = true;
+            if (collectCriteria())
+                exitIdle = true;
+            else
+                exitIdle = false;
         }
 
         private ICommand _ReleaseCommand;
@@ -148,15 +153,15 @@ namespace GetupMonitor.ViewModel
                 if (null == _ReleaseCommand)
                 {
                     _ReleaseCommand = new RelayCommand(
-                        param => testActive(),
+                        param => releaseCheck(),
                         param => true);
                 }
                 return _ReleaseCommand;
             }
         }
-        private void testActive()
+        private void releaseCheck()
         {
-            //exitIdle = true;
+            clickRelease = true;
         }
 
         private ICommand _AckFaultStateMachine;
@@ -201,6 +206,17 @@ namespace GetupMonitor.ViewModel
             }
         }
 
+        private string _StableRange = "-1";
+        public string StableRange
+        {
+            get { return _StableRange; }
+            set
+            {
+                _StableRange = value;
+                NotifyPropertyChanged("StableRange");
+            }
+        }
+
         private string _MinimumIR_A0 = "-1";
         public string MinimumIR_A0
         {
@@ -242,24 +258,47 @@ namespace GetupMonitor.ViewModel
             }
         }
 
-        private int _RawDataID_A0 = -1;
-        public int RawDataID_A0
+        private int _RawDataIR_A0 = -1;
+        public int RawDataIR_A0
         {
-            get { return _RawDataID_A0; }
+            get { return _RawDataIR_A0; }
             set
             {
-                _RawDataID_A0 = value;
-                NotifyPropertyChanged("RawDataID_A0");
+                _RawDataIR_A0 = value;
+                NotifyPropertyChanged("RawDataIR_A0");
             }
         }
-        private int _RawDataID_A1 = -1;
-        public int RawDataID_A1
+
+        private string _CountingA0 = "0/5";
+        public string CountingA0
         {
-            get { return _RawDataID_A1; }
+            get { return _CountingA0; }
             set
             {
-                _RawDataID_A1 = value;
-                NotifyPropertyChanged("RawDataID_A1");
+                _CountingA0 = value;
+                NotifyPropertyChanged("CountingA0");
+            }
+        }
+
+        private int _RawDataIR_A1 = -1;
+        public int RawDataIR_A1
+        {
+            get { return _RawDataIR_A1; }
+            set
+            {
+                _RawDataIR_A1 = value;
+                NotifyPropertyChanged("RawDataIR_A1");
+            }
+        }
+
+        private string _CountingA1 = "0/5";
+        public string CountingA1
+        {
+            get { return _CountingA1; }
+            set
+            {
+                _CountingA1 = value;
+                NotifyPropertyChanged("CountingA1");
             }
         }
 
@@ -271,6 +310,17 @@ namespace GetupMonitor.ViewModel
             {
                 _DetectState = value;
                 NotifyPropertyChanged("DetectState");
+            }
+        }
+
+        private Brush _MainDisplayColor = Brushes.DarkGray;
+        public Brush MainDisplayColor
+        {
+            get { return _MainDisplayColor; }
+            set
+            {
+                _MainDisplayColor = value;
+                NotifyPropertyChanged("MainDisplayColor");
             }
         }
 
