@@ -5,8 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GetupMonitor"
         xmlns:view ="clr-namespace:GetupMonitor.View"
-        mc:Ignorable="d"
-        Title="GetupMonitor" Width="550" Height="550" Closing="Window_Closing"  Background="#FF181818" WindowStartupLocation="CenterScreen">
+        Title="{Binding WindowTitle}" Width="550" Height="570" Closing="Window_Closing"  Background="#FF181818" WindowStartupLocation="CenterScreen" >
     <Window.Resources>
         <local:BoolRedConverter x:Key="brc"/>
         <local:BoolGreenConverter x:Key="bgc"/>
@@ -154,7 +153,7 @@
         </Style>
     </Window.Resources>
     <Border BorderBrush="#FF383838" BorderThickness="0" CornerRadius="0" Padding="0" 
-        Background="#FF181818" Width="550" Height="550" HorizontalAlignment="Center" VerticalAlignment="Stretch">
+        Background="#FF181818" Width="550" Height="570" HorizontalAlignment="Center" VerticalAlignment="Stretch">
 
         <Grid Background="#FF383838" Width="Auto" Height="Auto" >
             <Grid.RowDefinitions>
@@ -185,10 +184,13 @@
             </StackPanel>
 
             <StackPanel Grid.Row="2" VerticalAlignment="Top" HorizontalAlignment="Center" Orientation="Horizontal">
-                <UniformGrid Columns="3" Margin="0,0,2,0" Width="550"   HorizontalAlignment="Center">
+                <UniformGrid Columns="4" Margin="0,0,2,0" Width="550"   HorizontalAlignment="Center">
                     <Button x:Name="btnRun" Content="Run" Background="#FF29993D" Style="{DynamicResource DarkFocus}" 
                             Command="{Binding RunTrigger}"   IsEnabled="{Binding OkToRun}"/>
-
+                    
+                    <Button x:Name="btnSTOP" Content="STOP" Background="#FFBA2E45" Style="{DynamicResource DarkFocus}" 
+                            Command="{Binding JustSTOP}" IsEnabled="{Binding OkToSTOP}"/>
+                    
                     <Button x:Name="btnTest" Content="Release" Background="Navy" Style="{DynamicResource DarkFocus}" 
                             Command="{Binding ReleaseCommand}" IsEnabled="{Binding OkToRelease}"/>
 
@@ -202,26 +204,34 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="Auto"/>                        
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
 
                     <!--================CheckBox================-->
-                    <StackPanel Grid.Row="0"  Orientation="Horizontal">
+                    <StackPanel Grid.Row="0"  Orientation="Horizontal" HorizontalAlignment="Center">
                         <CheckBox DockPanel.Dock="Left" Height="20" Width="20" Margin="4,0,0,0" VerticalAlignment="Center" VerticalContentAlignment="Center" 
                                  HorizontalAlignment="Left" Padding="0"   IsChecked="{Binding AudioActive}"/>
                         <TextBlock DockPanel.Dock="Left" Style="{StaticResource db_pdf_TB}" Text="提示音效" HorizontalAlignment="Left" FontSize="24"/>
 
                         <CheckBox DockPanel.Dock="Left" Height="20" Width="20" Margin="20,0,0,0" VerticalAlignment="Center" VerticalContentAlignment="Center" 
                                   HorizontalAlignment="Left" Padding="0"  IsChecked="{Binding SingleMode}"/>
-                        <TextBlock DockPanel.Dock="Left" Style="{StaticResource db_pdf_TB}" Text="單一偵測" HorizontalAlignment="Left" FontSize="24"/>
-
-                        <TextBlock DockPanel.Dock="Left" Style="{StaticResource db_pdf_TB}" Text="穩定值" Margin="20,0,0,0" HorizontalAlignment="Left" FontSize="24"/>
-                        <TextBox   x:Name="txtStable"  VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"  Style="{StaticResource TextEnter}" MaxLength="11"
-                                   Height="27" Width="50" FontWeight="SemiBold" Text="{Binding StableRange}"  LostFocus="TBstable_LostFocus"  KeyUp="TBstable_KeyEnterUpdate"/>
+                        <TextBlock DockPanel.Dock="Left" Style="{StaticResource db_pdf_TB}" Text="單一偵測" HorizontalAlignment="Left" FontSize="24"/>                        
                     </StackPanel>
 
+                    <!--================Parameters================-->
+                    <StackPanel Grid.Row="1"  Orientation="Horizontal" HorizontalAlignment="Center">
+                        <TextBlock DockPanel.Dock="Left" Style="{StaticResource db_pdf_TB}" Text="穩定值" Margin="0,0,0,0" HorizontalAlignment="Left" FontSize="24"/>
+                        <TextBox   x:Name="txtStable"  VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"  Style="{StaticResource TextEnter}" MaxLength="11"
+                                   Height="27" Width="50" FontWeight="SemiBold" Text="{Binding StableRange}"  LostFocus="TBstable_LostFocus"  KeyUp="TBstable_KeyEnterUpdate"/>
+
+                        <TextBlock DockPanel.Dock="Left" Style="{StaticResource db_pdf_TB}" Text="取樣間隔(ms)" Margin="20,0,0,0" HorizontalAlignment="Left" FontSize="24"/>
+                        <TextBox   x:Name="txtInterval"  VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"  Style="{StaticResource TextEnter}" MaxLength="11"
+                                   Height="27" Width="100" FontWeight="SemiBold" Text="{Binding SampleInterval}"  LostFocus="TBInterval_LostFocus"  KeyUp="TBInterval_KeyEnterUpdate"/>
+                    </StackPanel>
+                    
                     <!--================A0 Detect================-->
-                    <StackPanel Grid.Row="1"  Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5,0,0" >
+                    <StackPanel Grid.Row="2"  Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5,0,0" >
                         <TextBlock DockPanel.Dock="Left" Style="{StaticResource db_pdf_TB}" Text="A0: 偵測下限" Margin="10,0,0,0" HorizontalAlignment="Left" FontSize="24"/>
                         <TextBox  x:Name="txtMinA0"  VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"  Style="{StaticResource TextEnter}" MaxLength="11"
                                    Height="27" Width="130" FontWeight="SemiBold" Text="{Binding MinimumIR_A0}"  LostFocus="TBminA0_LostFocus"  KeyUp="TBminA0_KeyEnterUpdate"/>
@@ -234,7 +244,7 @@
                     </StackPanel>
                     
                     <!--================A1 Detect================-->
-                    <StackPanel Grid.Row="2"  Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5,0,0" >
+                    <StackPanel Grid.Row="3"  Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,5,0,0" >
                         <TextBlock DockPanel.Dock="Left" Style="{StaticResource db_pdf_TB}" Text="A1: 偵測下限" Margin="10,0,0,0" HorizontalAlignment="Left" FontSize="24"/>
                         <TextBox   x:Name="txtMinA1" VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"  Style="{StaticResource TextEnter}" MaxLength="11"
                                    Height="27" Width="130" FontWeight="SemiBold" IsReadOnly="{Binding IsRunning}" Text="{Binding MinimumIR_A1}" LostFocus="TBminA1_LostFocus"  KeyUp="TBminA1_KeyEnterUpdate"/>
@@ -249,7 +259,7 @@
             </StackPanel>
 
             <!--================Runtime Data================-->
-            <StackPanel Grid.Row="4" Height="AUTO" Orientation="Horizontal" Margin="10,10,5,0" >
+            <StackPanel Grid.Row="4" Height="AUTO" Orientation="Horizontal" HorizontalAlignment="Center" Margin="10,10,5,0" >
                 <TextBlock DockPanel.Dock="Left" Style="{StaticResource db_pdf_TB}" Text="A0 IR : " HorizontalAlignment="Left" FontSize="24" Margin="5,0,0,0" />
                 <TextBox  VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"  Style="{StaticResource TextEnter}" MaxLength="11"
                           Height="27" Width="50" FontWeight="SemiBold" IsReadOnly="True" Text="{Binding RawDataIR_A0}" />
@@ -265,7 +275,7 @@
 
             <StackPanel Grid.Row="5" Height="AUTO" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,10,0,0" >
                 
-                <TextBox  VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"  Style="{StaticResource TextEnter}" MaxLength="11"
+                <TextBox  VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"  Style="{StaticResource TextEnter}" 
                           Height="125" Width="530" FontSize="40" FontWeight="SemiBold" IsReadOnly="True" Text="{Binding DetectState}" Background="{Binding MainDisplayColor}"/>
             </StackPanel>
 

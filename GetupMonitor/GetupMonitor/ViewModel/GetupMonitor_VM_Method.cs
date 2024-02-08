@@ -3,6 +3,7 @@ using InTheHand.Net.Sockets;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Media;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,22 +16,25 @@ namespace GetupMonitor.ViewModel
         #region Class Properties
         #endregion
 
-        enum DetectCriteria {StableRange, MinA0, MaxA0, CountingA0, MinA1, MaxA1, CountingA1}
+        enum DetectCriteria {StableRange, SampleInterval, MinA0, MaxA0, CountingA0, MinA1, MaxA1, CountingA1}
         Dictionary<DetectCriteria, uint> CurrentDetect;
 
         BluetoothClient BTclient = new BluetoothClient();
         BluetoothRadio BTradio = BluetoothRadio.Default;
 
+        SoundPlayer sPlayer;
+
         const string MAJOR_BLUETOOTH = "MAJOR III BLUETOOTH";
         const string HC06 = "HC-06";
-        
+         const string WarningAudio = "WarningAudio.wav";
+
         byte[] CmdGetIR_A0 = { 0xFA, 0xA0, 0xFF };
         byte[] CmdGetIR_A1 = { 0xFA, 0xA1, 0xFF };
 
         GetupMonitorStates bufferState = GetupMonitorStates.None, lastState = GetupMonitorStates.None;
 
         bool stateMachineTrigger = false, systemMonitorTrigger = false, getDataTrigger = false ;
-        bool FirstTime = true, exitIdle = false, readToGo = false;
+        bool FirstTime = true, exitIdle = false, stopCMD = false, readToGo = false, clickRelease = false;
 
         int runningDot = 0;
 
@@ -42,19 +46,20 @@ namespace GetupMonitor.ViewModel
             DetectState = MainDisplay;
         }
 
-        private void buttonState(bool Run, bool Release, bool Ack)
+        private void buttonState(bool Run, bool Release, bool Ack, bool STOP)
         {
             OkToRun = Run;
             OkToRelease = Release;
             OkToAck = Ack;
+            OkToSTOP = STOP;
         }
 
         private bool checkInteger()
         {
-            uint minA0 = Convert.ToUInt16(MinimumIR_A0);
-            uint maxA0 = Convert.ToUInt16(MaximumIR_A0);
-            uint minA1 = Convert.ToUInt16(MinimumIR_A1);
-            uint maxA1 = Convert.ToUInt16(MaximumIR_A1);
+            uint minA0 = Convert.ToUInt16(_MinimumIR_A0);
+            uint maxA0 = Convert.ToUInt16(_MaximumIR_A0);
+            uint minA1 = Convert.ToUInt16(_MinimumIR_A1);
+            uint maxA1 = Convert.ToUInt16(_MaximumIR_A1);
 
             bool limMinA0 = minA0 < 200;
             bool limMaxA0 = maxA0 < 200;
@@ -87,11 +92,12 @@ namespace GetupMonitor.ViewModel
             CurrentDetect = new Dictionary<DetectCriteria, uint>();
             try
             {
-                CurrentDetect.Add(DetectCriteria.StableRange, Convert.ToUInt16(StableRange));
-                CurrentDetect.Add(DetectCriteria.MinA0, Convert.ToUInt16(MinimumIR_A0));
-                CurrentDetect.Add(DetectCriteria.MaxA0, Convert.ToUInt16(MaximumIR_A0));
-                CurrentDetect.Add(DetectCriteria.MinA1, Convert.ToUInt16(MinimumIR_A1));
-                CurrentDetect.Add(DetectCriteria.MaxA1, Convert.ToUInt16(MaximumIR_A1));
+                CurrentDetect.Add(DetectCriteria.StableRange, Convert.ToUInt16(_StableRange));
+                CurrentDetect.Add(DetectCriteria.SampleInterval, Convert.ToUInt16(_SampleInterval));
+                CurrentDetect.Add(DetectCriteria.MinA0, Convert.ToUInt16(_MinimumIR_A0));
+                CurrentDetect.Add(DetectCriteria.MaxA0, Convert.ToUInt16(_MaximumIR_A0));
+                CurrentDetect.Add(DetectCriteria.MinA1, Convert.ToUInt16(_MinimumIR_A1));
+                CurrentDetect.Add(DetectCriteria.MaxA1, Convert.ToUInt16(_MaximumIR_A1));
 
                 return true;
             }
@@ -114,9 +120,9 @@ namespace GetupMonitor.ViewModel
 
         private void getDataIR()
         {
-            if (BTclient.Connected)
+            try
             {
-                try
+                if (BTclient.Connected)
                 {
                     NetworkStream nwStream = BTclient.GetStream();
                     nwStream.ReadTimeout = 1000;
@@ -134,11 +140,12 @@ namespace GetupMonitor.ViewModel
                     RawDataIR_A1 = receiveAryA1[0];
 
                     string stop = "";
+
                 }
-                catch (Exception ex)
-                {
-                    MessageBox.Show( ex.Message);
-                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
             }
         }
 

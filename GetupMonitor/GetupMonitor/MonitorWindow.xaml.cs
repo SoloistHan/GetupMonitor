@@ -16,7 +16,7 @@ namespace GetupMonitor
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MonitorWindow : Window
+    public partial class MonitorWindow : Window, INotifyPropertyChanged
     {       
         public MonitorWindow()
         {            
@@ -27,16 +27,45 @@ namespace GetupMonitor
         {
             //GetupMonitor_VM.StateMachineTrigger = false;
         }
+        #region INotifyPropertyChanged Implementation
+        // Declare the event 
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        // Create the NotifyPropertyChanged method to raise the event 
+        protected void NotifyPropertyChanged(string name)
+        {
+            PropertyChangedEventHandler handler = PropertyChanged;
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(name));
+            }
+        }
+
+        #endregion INotifyPropertyChanged Implementation
+
         private void TBstable_KeyEnterUpdate(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                txtInterval.Focus();
+            }
+        }
+        private void TBstable_LostFocus(object sender, RoutedEventArgs e)
+        {
+            BindingExpression binding = BindingOperations.GetBindingExpression(txtStable, TextBox.TextProperty);
+            if (binding != null) { binding.UpdateSource(); }
+        }
+
+        private void TBInterval_KeyEnterUpdate(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter)
             {
                 txtMinA0.Focus();
             }
         }
-        private void TBstable_LostFocus(object sender, RoutedEventArgs e)
+        private void TBInterval_LostFocus(object sender, RoutedEventArgs e)
         {
-            BindingExpression binding = BindingOperations.GetBindingExpression(txtStable, TextBox.TextProperty);
+            BindingExpression binding = BindingOperations.GetBindingExpression(txtInterval, TextBox.TextProperty);
             if (binding != null) { binding.UpdateSource(); }
         }
 
@@ -91,6 +120,8 @@ namespace GetupMonitor
             BindingExpression binding = BindingOperations.GetBindingExpression(txtMaxA1, TextBox.TextProperty);
             if (binding != null) { binding.UpdateSource(); }
         }
+
+
     }
 
     #region Color

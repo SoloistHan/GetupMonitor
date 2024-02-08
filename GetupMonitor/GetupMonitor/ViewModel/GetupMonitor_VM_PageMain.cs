@@ -16,6 +16,7 @@ namespace GetupMonitor.ViewModel
             AudioActive = Convert.ToBoolean( configDic[Audio_Active]);
             SingleMode = Convert.ToBoolean(configDic[Single_Mode]);
             StableRange = configDic[StableValue];
+            SampleInterval = configDic[Sample_Interval];
             MinimumIR_A0 =  configDic[Minimum_A0];
             MaximumIR_A0 = configDic[Maximum_A0];
             MinimumIR_A1 = configDic[Minimum_A1];
@@ -28,10 +29,28 @@ namespace GetupMonitor.ViewModel
             get { return _IsIdle; }
             set
             {
-                _IsIdle = value;
-                NotifyPropertyChanged("IsIdle");
+                if (_IsIdle != value)
+                {
+                    _IsIdle = value;
+                    NotifyPropertyChanged("IsIdle");
+                }             
             }
         }
+
+        private string _WindowTitle = "-1";
+        public string WindowTitle
+        {
+            get { return _WindowTitle; }
+            set
+            {
+                if (_WindowTitle != value)
+                {
+                    _WindowTitle = value;
+                    NotifyPropertyChanged("WindowTitle");
+                }
+            }
+        }
+
         #region Bluetooth
         private string _BlueToothState = "BlueToothState";
         public string BlueToothState
@@ -39,8 +58,11 @@ namespace GetupMonitor.ViewModel
             get { return _BlueToothState; }
             set 
             {
+                if (_BlueToothState != value)
+                {
                 _BlueToothState = value;
                 NotifyPropertyChanged("BlueToothState");
+ }
             }
         }
         private LedColor _TitleLED = LedColor.Red;
@@ -49,8 +71,10 @@ namespace GetupMonitor.ViewModel
             get { return _TitleLED; }
             set
             {
+                if (_TitleLED != value) {
                 _TitleLED = value;
                 NotifyPropertyChanged("TitleLED");
+ }
             }
         }
         #endregion
@@ -62,8 +86,11 @@ namespace GetupMonitor.ViewModel
             get { return _DateDisplay; }
             set
             {
-                _DateDisplay = value;
-                NotifyPropertyChanged("DateDisplay");
+                if (_DateDisplay != value)
+                {
+                    _DateDisplay = value;
+                    NotifyPropertyChanged("DateDisplay");
+                }
             }
         }
 
@@ -73,8 +100,11 @@ namespace GetupMonitor.ViewModel
             get { return _MachineState; }
             set
             {
+                if (_MachineState != value)
+                {
                 _MachineState = value;
                 NotifyPropertyChanged("MachineState");
+ }
             }
         }
         private string _OperatorPrompt = "OperatorPrompt";
@@ -83,8 +113,11 @@ namespace GetupMonitor.ViewModel
             get { return _OperatorPrompt; }
             set
             {
+                if (_OperatorPrompt != value)
+                { 
                 _OperatorPrompt = value;
                 NotifyPropertyChanged("OperatorPrompt");
+}
             }
         }
         #endregion
@@ -96,8 +129,24 @@ namespace GetupMonitor.ViewModel
             get { return _OkToRun; }
             set
             {
+                if (_OkToRun != value)
+                { 
                 _OkToRun = value;
                 NotifyPropertyChanged("OkToRun");
+}
+            }
+        }
+        private bool _OkToSTOP = false;
+        public bool OkToSTOP
+        {
+            get { return _OkToSTOP; }
+            set
+            {
+                if (_OkToSTOP != value)
+                {
+                _OkToSTOP = value;
+                NotifyPropertyChanged("OkToSTOP");
+ }
             }
         }
 
@@ -107,8 +156,11 @@ namespace GetupMonitor.ViewModel
             get { return _OkToRelease; }
             set
             {
+                if (_OkToRelease != value)
+                { 
                 _OkToRelease = value;
                 NotifyPropertyChanged("OkToRelease");
+}
             }
         }
 
@@ -118,8 +170,11 @@ namespace GetupMonitor.ViewModel
             get { return _OkToAck; }
             set
             {
+                if (_OkToAck != value)
+                {
                 _OkToAck = value;
                 NotifyPropertyChanged("OkToAck");
+                }
             }
         }
 
@@ -143,6 +198,25 @@ namespace GetupMonitor.ViewModel
                 exitIdle = true;
             else
                 exitIdle = false;
+        }
+
+        private ICommand _JustSTOP;
+        public ICommand JustSTOP
+        {
+            get
+            {
+                if (null == _JustSTOP)
+                {
+                    _JustSTOP = new RelayCommand(
+                        param => stopActive(),
+                        param => true);
+                }
+                return _JustSTOP;
+            }
+        }
+        private void stopActive()
+        {
+            stopCMD = true;
         }
 
         private ICommand _ReleaseCommand;
@@ -191,8 +265,11 @@ namespace GetupMonitor.ViewModel
             get { return _AudioActive; }
             set
             {
+                if (_AudioActive != value)
+                { 
                 _AudioActive = value;
                 NotifyPropertyChanged("AudioActive");
+}
             }
         }
         private bool _SingleMode = false;
@@ -201,8 +278,13 @@ namespace GetupMonitor.ViewModel
             get { return _SingleMode; }
             set
             {
+                if (_SingleMode != value)
+                {
+
+               
                 _SingleMode = value;
                 NotifyPropertyChanged("SingleMode");
+ }
             }
         }
 
@@ -212,8 +294,25 @@ namespace GetupMonitor.ViewModel
             get { return _StableRange; }
             set
             {
+                if (_StableRange != value)
+                { 
                 _StableRange = value;
                 NotifyPropertyChanged("StableRange");
+                }
+            }
+        }
+
+        private string _SampleInterval = "-1";
+        public string SampleInterval
+        {
+            get { return _SampleInterval; }
+            set
+            {
+                if (_SampleInterval != value)
+                {
+                _SampleInterval = value;
+                NotifyPropertyChanged("SampleInterval");
+                }
             }
         }
 
@@ -223,8 +322,11 @@ namespace GetupMonitor.ViewModel
             get { return _MinimumIR_A0; }
             set
             {
+                if (_MinimumIR_A0 != value)
+                { 
                 _MinimumIR_A0 = value;
                 NotifyPropertyChanged("MinimumIR_A0");
+                }
             }
         }
         private string _MaximumIR_A0 = "-1";
@@ -233,8 +335,13 @@ namespace GetupMonitor.ViewModel
             get { return _MaximumIR_A0; }
             set
             {
+                if (_MaximumIR_A0 != value)
+                {
+
                 _MaximumIR_A0 = value;
                 NotifyPropertyChanged("MaximumIR_A0");
+                }
+
             }
         }
         private string _MinimumIR_A1 = "-1";
@@ -243,8 +350,12 @@ namespace GetupMonitor.ViewModel
             get { return _MinimumIR_A1; }
             set
             {
+                if (_MinimumIR_A1 != value)
+                {
+
                 _MinimumIR_A1 = value;
                 NotifyPropertyChanged("MinimumIR_A1");
+                }
             }
         }
         private string _MaximumIR_A1 = "";
@@ -253,8 +364,12 @@ namespace GetupMonitor.ViewModel
             get { return _MaximumIR_A1; }
             set
             {
+                if (_MaximumIR_A1 != value)
+                {
+
                 _MaximumIR_A1 = value;
                 NotifyPropertyChanged("MaximumIR_A1");
+                }
             }
         }
 
@@ -264,8 +379,12 @@ namespace GetupMonitor.ViewModel
             get { return _RawDataIR_A0; }
             set
             {
+                if (_RawDataIR_A0 != value)
+                {
+
                 _RawDataIR_A0 = value;
                 NotifyPropertyChanged("RawDataIR_A0");
+                }
             }
         }
 
@@ -275,8 +394,12 @@ namespace GetupMonitor.ViewModel
             get { return _CountingA0; }
             set
             {
+                if (_CountingA0 != value)
+                {
+
                 _CountingA0 = value;
                 NotifyPropertyChanged("CountingA0");
+                }
             }
         }
 
@@ -286,8 +409,12 @@ namespace GetupMonitor.ViewModel
             get { return _RawDataIR_A1; }
             set
             {
+                if (_RawDataIR_A1 != value)
+                {
+
                 _RawDataIR_A1 = value;
                 NotifyPropertyChanged("RawDataIR_A1");
+                }
             }
         }
 
@@ -297,8 +424,12 @@ namespace GetupMonitor.ViewModel
             get { return _CountingA1; }
             set
             {
+                if (_CountingA1 != value)
+                {
+
                 _CountingA1 = value;
                 NotifyPropertyChanged("CountingA1");
+                }
             }
         }
 
@@ -308,8 +439,12 @@ namespace GetupMonitor.ViewModel
             get { return _DetectState; }
             set
             {
+                if (_DetectState != value)
+                {
+
                 _DetectState = value;
                 NotifyPropertyChanged("DetectState");
+                }
             }
         }
 
@@ -319,8 +454,12 @@ namespace GetupMonitor.ViewModel
             get { return _MainDisplayColor; }
             set
             {
+                if (_MainDisplayColor != value)
+                {
+
                 _MainDisplayColor = value;
                 NotifyPropertyChanged("MainDisplayColor");
+                }
             }
         }
 
